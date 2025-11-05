@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашний To-Do Лист</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        .task-input-section {
+            margin-bottom: 25px;
+        }
+        
+        .task-input {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .task-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px 0 0 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .task-input input:focus {
+            border-color: #2575fc;
+        }
+        
+        .task-input button {
+            background-color: #2575fc;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .task-input button:hover {
+            background-color: #1a68e8;
+        }
+        
+        .quick-tasks {
+            margin-top: 20px;
+        }
+        
+        .quick-tasks h3 {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .quick-task-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .quick-task-btn {
+            background-color: #f0f4ff;
+            border: 1px solid #d0d8ff;
+            border-radius: 20px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .quick-task-btn:hover {
+            background-color: #e1e8ff;
+            transform: translateY(-2px);
+        }
+        
+        .task-list {
+            list-style-type: none;
+            margin-top: 20px;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .task-item:hover {
+            background-color: #f0f4ff;
+            transform: translateX(5px);
+        }
+        
+        .task-item.completed {
+            background-color: #e8ffe8;
+            text-decoration: line-through;
+            color: #888;
+        }
+        
+        .task-checkbox {
+            margin-right: 12px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        
+        .task-text {
+            flex: 1;
+            font-size: 16px;
+        }
+        
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff5252;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        
+        .delete-btn:hover {
+            background-color: #ffeaea;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #888;
+        }
+        
+        .empty-state img {
+            width: 100px;
+            opacity: 0.5;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Домашний To-Do Лист</h1>
+        
+        <div class="task-input-section">
+            <div class="task-input">
+                <input type="text" id="new-task-input" placeholder="Добавьте новую задачу...">
+                <button id="add-task-btn">Добавить</button>
+            </div>
+            
+            <div class="quick-tasks">
+                <h3>Быстрые задачи:</h3>
+                <div class="quick-task-buttons">
+                    <button class="quick-task-btn">Помыть посуду</button>
+                    <button class="quick-task-btn">Пропылесосить</button>
+                    <button class="quick-task-btn">Постирать бельё</button>
+                    <button class="quick-task-btn">Полить цветы</button>
+                    <button class="quick-task-btn">Вынести мусор</button>
+                    <button class="quick-task-btn">Приготовить ужин</button>
+                </div>
+            </div>
+        </div>
+        
+        <ul class="task-list" id="task-list">
+            <!-- Задачи будут добавляться сюда -->
+        </ul>
+        
+        <div class="stats">
+            <span>Всего задач: <span id="total-tasks">0</span></span>
+            <span>Выполнено: <span id="completed-tasks">0</span></span>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const taskInput = document.getElementById('new-task-input');
+            const addTaskBtn = document.getElementById('add-task-btn');
+            const taskList = document.getElementById('task-list');
+            const quickTaskButtons = document.querySelectorAll('.quick-task-btn');
+            const totalTasksSpan = document.getElementById('total-tasks');
+            const completedTasksSpan = document.getElementById('completed-tasks');
+            
+            let tasks = JSON.parse(localStorage.getItem('homeTasks')) || [];
+            
+            // Загрузка задач из localStorage
+            function loadTasks() {
+                taskList.innerHTML = '';
+                
+                if (tasks.length === 0) {
+                    taskList.innerHTML = `
+                        <div class="empty-state">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23888'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z'/%3E%3C/svg%3E" alt="Нет задач">
+                            <p>У вас пока нет задач. Добавьте новую!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                tasks.forEach((task, index) => {
+                    const taskItem = document.createElement('li');
+                    taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+                    taskItem.innerHTML = `
+                        <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} data-index="${index}">
+                        <span class="task-text">${task.text}</span>
+                        <button class="delete-btn" data-index="${index}">×</button>
+                    `;
+                    taskList.appendChild(taskItem);
+                });
+                
+                updateStats();
+            }
+            
+            // Добавление новой задачи
+            function addTask(text) {
+                if (text.trim() === '') return;
+                
+                tasks.push({
+                    text: text.trim(),
+                    completed: false
+                });
+                
+                saveTasks();
+                loadTasks();
+                taskInput.value = '';
+            }
+            
+            // Удаление задачи
+            function deleteTask(index) {
+                tasks.splice(index, 1);
+                saveTasks();
+                loadTasks();
+            }
+            
+            // Переключение статуса задачи
+            function toggleTask(index) {
+                tasks[index].completed = !tasks[index].completed;
+                saveTasks();
+                loadTasks();
+            }
+            
+            // Сохранение задач в localStorage
+            function saveTasks() {
+                localStorage.setItem('homeTasks', JSON.stringify(tasks));
+            }
+            
+            // Обновление статистики
+            function updateStats() {
+                const totalTasks = tasks.length;
+                const completedTasks = tasks.filter(task => task.completed).length;
+                
+                totalTasksSpan.textContent = totalTasks;
+                completedTasksSpan.textContent = completedTasks;
+            }
+            
+            // Обработчики событий
+            addTaskBtn.addEventListener('click', function() {
+                addTask(taskInput.value);
+            });
+            
+            taskInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addTask(taskInput.value);
+                }
+            });
+            
+            quickTaskButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    addTask(this.textContent);
+                });
+            });
+            
+            taskList.addEventListener('click', function(e) {
+                if (e.target.classList.contains('delete-btn')) {
+                    const index = parseInt(e.target.getAttribute('data-index'));
+                    deleteTask(index);
+                } else if (e.target.classList.contains('task-checkbox')) {
+                    const index = parseInt(e.target.getAttribute('data-index'));
+                    toggleTask(index);
+                }
+            });
+            
+            // Инициализация
+            loadTasks();
+        });
+    </script>
+</body>
+</html>
